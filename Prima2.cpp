@@ -294,3 +294,27 @@ void SparseGraphGenerationList(int graphSize)
 		}
 	}
 }
+
+int List(int graphSize)
+{
+	int result = 0;
+	for (int i = 0; i < graphSize; i++)
+	{
+		result += k[i].size();
+	}
+	return result / graphSize;
+}
+
+int Matrix(int graphSize)
+{
+	int result = 0;
+	for (int i = 0; i < graphSize; i++)
+	{
+		for (int j = 0; j < graphSize; j++)
+		{
+			if (vecForMatrix[i][j] != 0)
+				result += k[i].size();
+		}
+	}
+	return result / graphSize;
+}
