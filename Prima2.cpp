@@ -27,7 +27,8 @@ int main() // Ввод графа
 {
 	setlocale(LC_ALL, "Russian");
 	int m, n, f,num;
-	fstream fin("C://graph.txt");
+	fstream fin ("C://graph.txt");
+	fstream fin2 ("C://graphmat.txt");
 	if (!fin.is_open())
 		cout << "File not open";
 	else
@@ -59,14 +60,14 @@ int main() // Ввод графа
 		}
 		case 2:
 		{
-			fin >> maxSize; // размер матрицы maxSize * maxSize
+			fin2 >> maxSize; // размер матрицы maxSize * maxSize
 			vecForMatrix.resize(maxSize);
-			for (int i = 0; i < maxSize && !fin.eof(); i++)
+			for (int i = 0; i < maxSize && !fin2.eof(); i++)
 			{
 				vecForMatrix[i].resize(maxSize);
 				for (int j = 0; j < maxSize; j++)
 				{
-					fin >> m;
+					fin2 >> m;
 					vecForMatrix[i][j] = m;
 				}
 			}
@@ -114,7 +115,7 @@ int main() // Ввод графа
 		}
 		case 6:
 		{
-			cout << "Введите размер графа" << endl;
+			cout << "Введите размер графа" << endl;;
 			cin >> maxSize;
 			SparseGraphGenerationList(maxSize);
 			clock_t start = clock();
@@ -160,7 +161,6 @@ void Deikstra()
 				}
 			}
 		}
-		fout.clear();
 		fout.close();
 	}
 }
@@ -168,7 +168,7 @@ void Deikstra()
 void DeikstraForMatrix()
 {
 	fstream fout;
-	fout.open("C://out.txt");
+	fout.open("C://output.txt");
 	if (!fout.is_open())
 		cout << "File not open";
 	else
@@ -186,15 +186,16 @@ void DeikstraForMatrix()
 			visited[f] = 1;
 			S.pop();
 			for (int j = 0; j < vecForMatrix[f].size(); ++j)
-
-
 			{
 				int len = vecForMatrix[f][j], i = j;
-				if (!visited[j] && (dl[j] == 0 || dl[f] + len < dl[j]) && vecForMatrix[f][j] != 0)
+				if (vecForMatrix[f][j] != 0)
 				{
-					dl[j] = dl[f] + len;
-					sel[j] = f;
-					S.push(make_pair(-dl[i], i));
+					if (!visited[i] && (dl[i] == 0 || dl[f] + len < dl[i]))
+					{
+						dl[i] = dl[f] + len;
+						sel[i] = f;
+						S.push(make_pair(-dl[i], i));
+					}
 				}
 			}
 			f++;
@@ -205,7 +206,7 @@ void DeikstraForMatrix()
 
 void DenseGraphGeneration(int graphSize)
 {
-	vecForMatrix.resize(graphSize);
+	vecForMatrix.resize(graphSize); 
 	srand(time(nullptr));
 	int cur = 0;
 	for (int i = 0; i < graphSize; i++)
@@ -215,7 +216,7 @@ void DenseGraphGeneration(int graphSize)
 		{
 			if (i == 0 && j == 0) // выполняется один раз
 			{
-				cur = 1 + rand() % (graphSize - 1);
+				cur = 1 + rand() % (graphSize - 2);
 				vecForMatrix[i][cur] = 100 + rand() % 100;// сделать чтобы соединяло с рандомной
 			}
 			else
